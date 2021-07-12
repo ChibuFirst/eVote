@@ -1,0 +1,2 @@
+rootProject.name = "eVote"
+include ':app'
