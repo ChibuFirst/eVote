@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="none"
+    tools:context=".StudentSignupFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/create_a"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/student"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+                android:textColor="@color/teal_200"
+                android:textStyle="bold" />
+
+            <Space
+                android:layout_width="8dp"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/account"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/full_name"
+            android:textColor="@color/teal_200" />
+
+        <EditText
+            android:id="@+id/fullname_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/edit_text_background"
+            android:hint="@string/john_doe"
+            android:importantForAutofill="no"
+            android:inputType="text|textCapWords"
+            android:textColor="@color/white"
+            android:textColorHint="#949494"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/registration_number"
+            android:textColor="@color/teal_200" />
+
+        <EditText
+            android:id="@+id/regno_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/edit_text_background"
+            android:hint="@string/_20_0001_slt"
+            android:importantForAutofill="no"
+            android:inputType="text|textCapWords"
+            android:textColor="@color/white"
+            android:textColorHint="#949494"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/gender"
+            android:textColor="@color/teal_200" />
+
+        <Spinner
+            android:id="@+id/gender_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/edit_text_background"
+            android:entries="@array/gender"
+            android:textSize="14sp"
+            android:theme="@style/mySpinnerItem" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/program_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toStartOf="@id/level_layout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/program"
+                    android:textColor="@color/teal_200" />
+
+                <Spinner
+                    android:id="@+id/program_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/edit_text_background"
+                    android:entries="@array/program"
+                    android:textSize="14sp"
+                    android:theme="@style/mySpinnerItem" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/level_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/program_layout"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/level"
+                    android:textColor="@color/teal_200" />
+
+                <Spinner
+                    android:id="@+id/level_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/edit_text_background"
+                    android:entries="@array/level"
+                    android:textSize="14sp"
+                    android:theme="@style/mySpinnerItem" />
+
+            </LinearLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/create_new_password"
+            android:textColor="@color/teal_200" />
+
+        <EditText
+            android:id="@+id/password_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/edit_text_background"
+            android:importantForAutofill="no"
+            android:inputType="textPassword"
+            android:textColor="@color/white"
+            android:textColorHint="#949494"
+            android:textSize="14sp"
+            tools:ignore="LabelFor" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/confirm_password"
+            android:textColor="@color/teal_200" />
+
+        <EditText
+            android:id="@+id/confirm_password_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/edit_text_background"
+            android:importantForAutofill="no"
+            android:inputType="textPassword"
+            android:textColor="@color/white"
+            android:textColorHint="#949494"
+            android:textSize="14sp"
+            tools:ignore="LabelFor" />
+
+        <Button
+            android:id="@+id/signup_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/sign_up"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
+
+</ScrollView>

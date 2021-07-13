@@ -15,4 +15,14 @@
         <item name="android:windowBackground">@color/purple_700</item>
         <item name="android:navigationBarColor">@color/purple_700</item>
     </style>
+
+    <style name="Theme.Launcher" parent="Theme.EVote">
+        <item name="android:windowBackground">@drawable/launcher_background</item>
+    </style>
+
+    <style name="mySpinnerItem" parent="@style/Widget.AppCompat.DropDownItem.Spinner">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@color/purple_200</item>
+    </style>
+
 </resources>

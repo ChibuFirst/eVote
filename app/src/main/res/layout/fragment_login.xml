@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".LoginFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/login_to"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/your"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+                android:textColor="@color/teal_200"
+                android:textStyle="bold" />
+
+            <Space
+                android:layout_width="8dp"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/account"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/registration_number"
+            android:textColor="@color/teal_200" />
+
+        <EditText
+            android:id="@+id/regno_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/edit_text_background"
+            android:hint="@string/_20_0001_slt"
+            android:importantForAutofill="no"
+            android:inputType="text|textCapWords"
+            android:textColor="@color/white"
+            android:textColorHint="#949494"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/enter_password"
+            android:textColor="@color/teal_200" />
+
+        <EditText
+            android:id="@+id/password_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/edit_text_background"
+            android:importantForAutofill="no"
+            android:inputType="textPassword"
+            android:textColor="@color/white"
+            android:textColorHint="#949494"
+            android:textSize="14sp"
+            tools:ignore="LabelFor" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/login_button"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:layout_marginBottom="24dp"
+        android:text="@string/login"
+        android:textAllCaps="false" />
+
+
+</RelativeLayout>

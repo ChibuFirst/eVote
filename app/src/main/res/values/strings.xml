@@ -1,3 +1,59 @@
 <resources>
     <string name="app_name">eVote</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="create_an_account">Create an Account</string>
+    <string name="sign_up_as_a_student">Sign up as a Student</string>
+    <string name="sign_up_as_candidate">Sign up as Candidate</string>
+    <string name="or">or</string>
+    <string name="login">Login</string>
+    <string name="create_a">Create a</string>
+    <string name="account">account</string>
+    <string name="student">student</string>
+    <string name="full_name">Full name</string>
+    <string name="john_doe">John Doe</string>
+    <string name="registration_number">Registration number</string>
+    <string name="_20_0001_slt">20/0001/SLT</string>
+    <string name="gender">Gender</string>
+    <string name="create_new_password">Create new password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="sign_up">Sign up</string>
+    <string name="program">Program</string>
+    <string name="level">Level</string>
+    <string name="candidate">candidate</string>
+    <string name="add_a_photo_of_you">Add a photo of you</string>
+    <string name="choose">Choose</string>
+    <string name="position">Position</string>
+    <string name="see_all">See all</string>
+    <string name="say_something_about_yourself">Say something about yourself</string>
+    <string name="i_am">I am...</string>
+    <string name="login_to">Login to</string>
+    <string name="your">your</string>
+    <string name="enter_password">Enter password</string>
+    <string-array name="gender">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+    <string-array name="program">
+        <item>Morning</item>
+        <item>Evening</item>
+        <item>Weekend</item>
+    </string-array>
+    <string-array name="level">
+        <item>ND 1</item>
+        <item>ND 2</item>
+        <item>HND 1</item>
+        <item>HND 2</item>
+    </string-array>
+    <string-array name="position">
+        <item>President</item>
+        <item>Vice President</item>
+        <item>Secretary General</item>
+        <item>Assistant Secretary General</item>
+        <item>Financial Secretary</item>
+        <item>Ethics and research</item>
+        <item>Socials</item>
+        <item>Publicity</item>
+        <item>Welfare</item>
+    </string-array>
 </resources>
