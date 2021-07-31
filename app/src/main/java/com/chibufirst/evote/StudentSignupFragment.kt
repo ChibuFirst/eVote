@@ -1,18 +1,21 @@
 package com.chibufirst.evote
 
+import android.content.SharedPreferences
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.chibufirst.evote.databinding.FragmentStudentSignupBinding
-import com.chibufirst.evote.models.Student
-import com.google.android.material.snackbar.Snackbar
+import com.chibufirst.evote.util.Constants
 
 class StudentSignupFragment : Fragment() {
 
     private var binding: FragmentStudentSignupBinding? = null
+    private lateinit var prefs: SharedPreferences
+    private lateinit var prefsEditor: SharedPreferences.Editor
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,6 +29,7 @@ class StudentSignupFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        prefs = requireContext().getSharedPreferences(Constants.PREF_NAME, 0)
         binding!!.signupButton.setOnClickListener { validateUserInputs() }
     }
 
@@ -40,6 +44,11 @@ class StudentSignupFragment : Fragment() {
                 regnoEditText.text.isEmpty() -> {
                     displayMessage("Please enter your registration number.")
                     regnoEditText.requestFocus()
+                    return
+                }
+                emailEditText.text.isEmpty() -> {
+                    displayMessage("Please enter your email address.")
+                    emailEditText.requestFocus()
                     return
                 }
                 passwordEditText.text.isEmpty() -> {
@@ -66,6 +75,16 @@ class StudentSignupFragment : Fragment() {
                         levelSpinner.selectedItem.toString(),
                         passwordEditText.text.toString()
                     )*/
+                    prefsEditor = prefs.edit()
+                    prefsEditor.putString(Constants.SNAME, fullnameEditText.text.toString())
+                    prefsEditor.putString(Constants.SREGNO, regnoEditText.text.toString())
+                    prefsEditor.putString(Constants.SEMAIL, emailEditText.text.toString())
+                    prefsEditor.putString(Constants.SGENDER, genderSpinner.selectedItem.toString())
+                    prefsEditor.putString(Constants.SPROGRAM, programSpinner.selectedItem.toString())
+                    prefsEditor.putString(Constants.SLEVEL, levelSpinner.selectedItem.toString())
+                    prefsEditor.putString(Constants.SPWORD, passwordEditText.text.toString())
+                    prefsEditor.apply()
+                    Toast.makeText(requireContext(), "Registration successful.", Toast.LENGTH_LONG).show()
                     findNavController().navigate(R.id.action_studentSignupFragment_to_loginFragment)
                 }
             }
@@ -73,7 +92,7 @@ class StudentSignupFragment : Fragment() {
     }
 
     private fun displayMessage(msg: String) {
-        Snackbar.make(binding!!.root, msg, Snackbar.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_LONG).show()
     }
 
     override fun onDestroyView() {

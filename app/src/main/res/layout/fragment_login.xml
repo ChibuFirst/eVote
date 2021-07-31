@@ -50,28 +50,28 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/registration_number"
+            android:layout_marginTop="12dp"
+            android:text="@string/email_address"
             android:textColor="@color/teal_200" />
 
         <EditText
-            android:id="@+id/regno_edit_text"
+            android:id="@+id/email_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:background="@drawable/edit_text_background"
-            android:hint="@string/_20_0001_slt"
             android:importantForAutofill="no"
-            android:inputType="text|textCapWords"
+            android:inputType="textEmailAddress|textCapWords"
             android:textColor="@color/white"
             android:textColorHint="#949494"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="LabelFor" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/enter_password"
+            android:text="@string/password"
             android:textColor="@color/teal_200" />
 
         <EditText
@@ -91,9 +91,9 @@
 
     <Button
         android:id="@+id/login_button"
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_marginTop="28dp"
         android:layout_marginBottom="24dp"
         android:text="@string/login"

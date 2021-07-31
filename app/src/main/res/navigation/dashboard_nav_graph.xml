@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dashboard_nav_graph"
+    app:startDestination="@id/dashboardHomeFragment">
+
+    <fragment
+        android:id="@+id/dashboardHomeFragment"
+        android:name="com.chibufirst.evote.dashboard.DashboardHomeFragment"
+        android:label="fragment_dashboard_home"
+        tools:layout="@layout/fragment_dashboard_home" >
+        <action
+            android:id="@+id/action_dashboardHomeFragment_to_dashboardPositionFragment"
+            app:destination="@id/dashboardPositionFragment" />
+        <action
+            android:id="@+id/action_dashboardHomeFragment_to_dashboardNotificationFragment"
+            app:destination="@id/dashboardNotificationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/dashboardPositionFragment"
+        android:name="com.chibufirst.evote.dashboard.DashboardPositionFragment"
+        android:label="fragment_dashboard_position"
+        tools:layout="@layout/fragment_dashboard_position" >
+        <argument
+            android:name="position"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/dashboardNotificationFragment"
+        android:name="com.chibufirst.evote.dashboard.DashboardNotificationFragment"
+        android:label="fragment_dashboard_notification"
+        tools:layout="@layout/fragment_dashboard_notification" />
+    <fragment
+        android:id="@+id/dashboardProfileFragment"
+        android:name="com.chibufirst.evote.dashboard.DashboardProfileFragment"
+        android:label="fragment_dashboard_profile"
+        tools:layout="@layout/fragment_dashboard_profile" />
+    <fragment
+        android:id="@+id/dashboardResultFragment"
+        android:name="com.chibufirst.evote.dashboard.DashboardResultFragment"
+        android:label="fragment_dashboard_result"
+        tools:layout="@layout/fragment_dashboard_result" />
+    <fragment
+        android:id="@+id/dashboardVoteFragment"
+        android:name="com.chibufirst.evote.dashboard.DashboardVoteFragment"
+        android:label="fragment_dashboard_vote"
+        tools:layout="@layout/fragment_dashboard_vote" />
+    <fragment
+        android:id="@+id/dashboardVotingCompletedFragment"
+        android:name="com.chibufirst.evote.dashboard.DashboardVotingCompletedFragment"
+        android:label="fragment_dashboard_voting_completed"
+        tools:layout="@layout/fragment_dashboard_voting_completed" >
+        <action
+            android:id="@+id/action_dashboardVotingCompletedFragment_to_dashboardHomeFragment"
+            app:destination="@id/dashboardHomeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/dashboardLogoutFragment"
+        android:name="com.chibufirst.evote.dashboard.DashboardLogoutFragment"
+        android:label="fragment_dashboard_logout"
+        tools:layout="@layout/fragment_dashboard_logout" />
+</navigation>

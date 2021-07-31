@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/admin_nav_graph"
+    app:startDestination="@id/adminHomeFragment">
+
+    <fragment
+        android:id="@+id/adminHomeFragment"
+        android:name="com.chibufirst.evote.admin.AdminHomeFragment"
+        android:label="fragment_admin_home"
+        tools:layout="@layout/fragment_admin_home" >
+        <action
+            android:id="@+id/action_adminHomeFragment_to_adminPositionFragment"
+            app:destination="@id/adminPositionFragment" />
+        <action
+            android:id="@+id/action_adminHomeFragment_to_adminNotificationFragment2"
+            app:destination="@id/adminNotificationFragment" />
+        <action
+            android:id="@+id/action_adminHomeFragment_to_adminVoteFragment"
+            app:destination="@id/adminVoteFragment" />
+        <action
+            android:id="@+id/action_adminHomeFragment_to_adminResultFragment"
+            app:destination="@id/adminResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/adminPositionFragment"
+        android:name="com.chibufirst.evote.admin.AdminPositionFragment"
+        android:label="fragment_admin_position"
+        tools:layout="@layout/fragment_admin_position" >
+        <action
+            android:id="@+id/action_adminPositionFragment_to_adminCandidateFragment"
+            app:destination="@id/adminCandidateFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/adminCandidateFragment"
+        android:name="com.chibufirst.evote.admin.AdminCandidateFragment"
+        android:label="fragment_admin_candidate"
+        tools:layout="@layout/fragment_admin_candidate" >
+        <argument
+            android:name="position"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/adminNotificationFragment"
+        android:name="com.chibufirst.evote.admin.AdminNotificationFragment"
+        android:label="fragment_admin_notification"
+        tools:layout="@layout/fragment_admin_notification" />
+    <fragment
+        android:id="@+id/adminVoteFragment"
+        android:name="com.chibufirst.evote.admin.AdminVoteFragment"
+        android:label="fragment_admin_vote"
+        tools:layout="@layout/fragment_admin_vote" />
+    <fragment
+        android:id="@+id/adminResultFragment"
+        android:name="com.chibufirst.evote.admin.AdminResultFragment"
+        android:label="fragment_admin_result"
+        tools:layout="@layout/fragment_admin_result" />
+</navigation>
