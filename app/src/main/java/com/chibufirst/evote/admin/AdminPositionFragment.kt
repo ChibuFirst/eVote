@@ -11,11 +11,15 @@ import androidx.navigation.findNavController
 import com.chibufirst.evote.MainActivity
 import com.chibufirst.evote.R
 import com.chibufirst.evote.databinding.FragmentAdminPositionBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import java.util.*
 
 class AdminPositionFragment : Fragment() {
 
     private var binding: FragmentAdminPositionBinding? = null
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,6 +33,7 @@ class AdminPositionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        auth = Firebase.auth
         val adapter = ArrayAdapter(requireContext(),
             R.layout.position_list_item, resources.getStringArray(R.array.position))
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
@@ -37,6 +42,7 @@ class AdminPositionFragment : Fragment() {
             titleText.text = getString(R.string.elections, currentSession)
             headerText.setOnClickListener { requireActivity().onBackPressed() }
             logoutImage.setOnClickListener {
+                auth.signOut()
                 requireActivity().startActivity(Intent(requireActivity(), MainActivity::class.java))
                 requireActivity().finish()
             }

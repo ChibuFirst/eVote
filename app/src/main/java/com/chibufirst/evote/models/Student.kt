@@ -1,10 +1,16 @@
 package com.chibufirst.evote.models
 
-data class Student(
-    val fullName: String,
-    val regno: String,
-    val gender: String,
-    val program: String,
-    val level: String,
-    val password: String
-)
+import java.io.Serializable
+
+data class Student (
+    var user: String? = null,
+    var fullName: String? = null,
+    var regno: String? = null,
+    var email: String? = null,
+    var gender: String? = null,
+    var program: String? = null,
+    var level: String? = null,
+    var photo: String? = null,
+    var position: String? = null,
+    var bio: String? = null
+) : Serializable

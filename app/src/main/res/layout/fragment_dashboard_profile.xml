@@ -45,7 +45,7 @@
         android:textColor="@color/white"
         android:textStyle="bold" />
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/candidate_image"
         android:layout_width="72dp"
         android:layout_height="72dp"
@@ -54,7 +54,9 @@
         android:importantForAccessibility="no"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_account"
-        android:visibility="gone" />
+        android:visibility="gone"
+        app:civ_border_color="@color/white"
+        app:civ_border_width="2dp" />
 
     <ScrollView
         android:layout_width="match_parent"

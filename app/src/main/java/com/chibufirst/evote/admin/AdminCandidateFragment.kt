@@ -1,21 +1,27 @@
 package com.chibufirst.evote.admin
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.navArgs
+import com.chibufirst.evote.MainActivity
 import com.chibufirst.evote.R
 import com.chibufirst.evote.adapters.CandidatesRecyclerAdapter
 import com.chibufirst.evote.databinding.FragmentAdminCandidateBinding
 import com.chibufirst.evote.models.Nominee
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import java.util.*
 import kotlin.collections.ArrayList
 
 class AdminCandidateFragment : Fragment() {
 
     private var binding: FragmentAdminCandidateBinding? = null
+    private lateinit var auth: FirebaseAuth
     private val args: AdminCandidateFragmentArgs by navArgs()
 
     override fun onCreateView(
@@ -30,6 +36,7 @@ class AdminCandidateFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        auth = Firebase.auth
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
         val currentSession = "${currentYear-1}/$currentYear"
 
@@ -51,6 +58,11 @@ class AdminCandidateFragment : Fragment() {
             positionTextView.text = args.position
             positionTextView.setOnClickListener { requireActivity().onBackPressed() }
             candidatesRecycler.adapter = nomineeAdapter
+            logoutImage.setOnClickListener {
+                auth.signOut()
+                requireActivity().startActivity(Intent(requireActivity(), MainActivity::class.java))
+                requireActivity().finish()
+            }
         }
     }
 

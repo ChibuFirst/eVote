@@ -9,11 +9,15 @@ import android.view.ViewGroup
 import com.chibufirst.evote.MainActivity
 import com.chibufirst.evote.R
 import com.chibufirst.evote.databinding.FragmentAdminResultBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import java.util.*
 
 class AdminResultFragment : Fragment() {
 
     private var binding: FragmentAdminResultBinding? = null
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,12 +31,14 @@ class AdminResultFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        auth = Firebase.auth
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
         val currentSession = "${currentYear-1}/$currentYear"
         binding!!.apply {
             titleText.text = getString(R.string.elections, currentSession)
             headerText.setOnClickListener { requireActivity().onBackPressed() }
             logoutImage.setOnClickListener {
+                auth.signOut()
                 requireActivity().startActivity(Intent(requireActivity(), MainActivity::class.java))
                 requireActivity().finish()
             }

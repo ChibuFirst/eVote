@@ -1,21 +1,36 @@
 package com.chibufirst.evote
 
-import android.content.SharedPreferences
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.chibufirst.evote.admin.AdminActivity
+import com.chibufirst.evote.dashboard.DashboardActivity
 import com.chibufirst.evote.databinding.FragmentStudentSignupBinding
+import com.chibufirst.evote.models.Student
 import com.chibufirst.evote.util.Constants
+import com.chibufirst.evote.util.Util
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.auth.ktx.userProfileChangeRequest
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.ktx.Firebase
 
 class StudentSignupFragment : Fragment() {
 
     private var binding: FragmentStudentSignupBinding? = null
-    private lateinit var prefs: SharedPreferences
-    private lateinit var prefsEditor: SharedPreferences.Editor
+    private lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
+
+    companion object {
+        private val TAG: String = StudentSignupFragment::class.java.simpleName
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,70 +44,131 @@ class StudentSignupFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        prefs = requireContext().getSharedPreferences(Constants.PREF_NAME, 0)
+        auth = Firebase.auth
+        db = Firebase.firestore
         binding!!.signupButton.setOnClickListener { validateUserInputs() }
+        binding!!.progressLayout.setOnClickListener(null)
+        toggleProgressLayout(false)
     }
 
     private fun validateUserInputs() {
+        Util.hideKeyboard(requireActivity())
         binding!!.apply {
             when {
                 fullnameEditText.text.isEmpty() -> {
-                    displayMessage("Full name required.")
+                    Util.displayLongMessage(requireContext(), "Full name required.")
                     fullnameEditText.requestFocus()
                     return
                 }
                 regnoEditText.text.isEmpty() -> {
-                    displayMessage("Please enter your registration number.")
+                    Util.displayLongMessage(requireContext(), "Please enter your registration number.")
                     regnoEditText.requestFocus()
                     return
                 }
                 emailEditText.text.isEmpty() -> {
-                    displayMessage("Please enter your email address.")
+                    Util.displayLongMessage(requireContext(), "Please enter your email address.")
                     emailEditText.requestFocus()
                     return
                 }
                 passwordEditText.text.isEmpty() -> {
-                    displayMessage("Password required.")
+                    Util.displayLongMessage(requireContext(), "Password required.")
                     passwordEditText.requestFocus()
                     return
                 }
                 passwordEditText.text.toString().length < 6 -> {
-                    displayMessage("Your password should be at least 6 characters.")
+                    Util.displayLongMessage(requireContext(), "Your password should be at least 6 characters.")
                     passwordEditText.requestFocus()
                     return
                 }
                 passwordEditText.text.toString() != confirmPasswordEditText.text.toString() -> {
-                    displayMessage("The two passwords does not match.")
+                    Util.displayLongMessage(requireContext(), "The two passwords does not match.")
                     confirmPasswordEditText.requestFocus()
                     return
                 }
                 else -> {
-                    /*val student = Student(
+                    val student = Student(
+                        Constants.STUDENT,
                         fullnameEditText.text.toString(),
                         regnoEditText.text.toString(),
+                        emailEditText.text.toString(),
                         genderSpinner.selectedItem.toString(),
                         programSpinner.selectedItem.toString(),
                         levelSpinner.selectedItem.toString(),
-                        passwordEditText.text.toString()
-                    )*/
-                    prefsEditor = prefs.edit()
-                    prefsEditor.putString(Constants.SNAME, fullnameEditText.text.toString())
-                    prefsEditor.putString(Constants.SREGNO, regnoEditText.text.toString())
-                    prefsEditor.putString(Constants.SEMAIL, emailEditText.text.toString())
-                    prefsEditor.putString(Constants.SGENDER, genderSpinner.selectedItem.toString())
-                    prefsEditor.putString(Constants.SPROGRAM, programSpinner.selectedItem.toString())
-                    prefsEditor.putString(Constants.SLEVEL, levelSpinner.selectedItem.toString())
-                    prefsEditor.putString(Constants.SPWORD, passwordEditText.text.toString())
-                    prefsEditor.apply()
-                    Toast.makeText(requireContext(), "Registration successful.", Toast.LENGTH_LONG).show()
-                    findNavController().navigate(R.id.action_studentSignupFragment_to_loginFragment)
+                        "",
+                        "",
+                        ""
+                    )
+                    createAccount(student, passwordEditText.text.toString())
                 }
             }
         }
     }
 
-    private fun displayMessage(msg: String) {
-        Toast.makeText(requireContext(), msg, Toast.LENGTH_LONG).show()
+    private fun createAccount(student: Student, password: String) {
+        toggleProgressLayout(true)
+        auth.createUserWithEmailAndPassword(student.email!!, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d(TAG, "createUserWithEmail:success")
+                    val user = auth.currentUser
+                    val profileUpdates = userProfileChangeRequest {
+                        displayName = student.fullName
+                    }
+                    user!!.updateProfile(profileUpdates)
+                    db.collection(Constants.USERS)
+                        .document(student.email!!)
+                        .set(student)
+                        .addOnSuccessListener { Util.displayLongMessage(requireContext(), "Details saved") }
+                        .addOnFailureListener { e -> Util.displayLongMessage(requireContext(), "Error saving details: \n${e.message}") }
+                    Util.displayLongMessage(requireContext(), "Registration successful.")
+                    findNavController().navigate(R.id.action_studentSignupFragment_to_loginFragment)
+                } else {
+                    Log.w(TAG, "createUserWithEmail:failure", task.exception)
+                    Util.displayLongMessage(requireContext(), "Registration was not successful.\n${task.exception?.message}")
+                }
+                toggleProgressLayout(false)
+            }
+    }
+
+    private fun toggleProgressLayout(isShown: Boolean) {
+        if (isShown) {
+            binding!!.progressLayout.visibility = View.VISIBLE
+        } else {
+            binding!!.progressLayout.visibility = View.GONE
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        auth.currentUser?.let {
+            if (it.email != Constants.ADMIN) {
+                db.collection(Constants.USERS).document(it.email!!)
+                    .get()
+                    .addOnSuccessListener { document ->
+                        if (document != null) {
+                            Log.d(TAG, "DocumentSnapshot data: ${document.data}")
+                            val student = document.toObject<Student>()
+                            Util.displayLongMessage(requireContext(), "Login Successful.")
+
+                            val intent = Intent(requireContext(), DashboardActivity::class.java)
+                            intent.putExtra(Constants.USER, student)
+                            requireContext().startActivity(intent)
+                            requireActivity().finish()
+                        } else {
+                            Log.d(TAG, "No such document")
+                            Util.displayLongMessage(requireContext(), "No such document")
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.d(TAG, "get failed with ", exception)
+                        Util.displayLongMessage(requireContext(), "get failed with \n ${exception.message}")
+                    }
+            } else {
+                Util.displayLongMessage(requireContext(), "Admin login successful.")
+                requireContext().startActivity(Intent(requireContext(), AdminActivity::class.java))
+                requireActivity().finish()
+            }
+        }
     }
 
     override fun onDestroyView() {

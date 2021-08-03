@@ -1,3 +1,3 @@
 package com.chibufirst.evote.models
 
-data class Notifications(val message: String, val date: String)
+data class Notifications(val message: String? = null, val date: String? = null)

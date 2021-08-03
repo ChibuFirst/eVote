@@ -8,8 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import com.bumptech.glide.Glide
 import com.chibufirst.evote.R
 import com.chibufirst.evote.databinding.FragmentDashboardProfileBinding
+import com.chibufirst.evote.models.Student
 import com.chibufirst.evote.util.Constants
 import java.util.*
 
@@ -31,35 +33,37 @@ class DashboardProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         prefs = requireContext().getSharedPreferences(Constants.PREF_NAME, 0)
-        val currentUser = requireActivity().intent.getStringExtra(Constants.USER)
+        val currentStudent =
+            requireActivity().intent.getSerializableExtra(Constants.USER) as Student
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        val currentSession = "${currentYear-1}/$currentYear"
+        val currentSession = "${currentYear - 1}/$currentYear"
         val drawerLayout: DrawerLayout =
             requireActivity().findViewById(R.id.dashboard_drawer_layout) as DrawerLayout
+
         binding!!.apply {
             titleText.text = getString(R.string.elections, currentSession)
-            if (currentUser == Constants.CANDIDATE) {
+            nameText.text = currentStudent.fullName
+            regnoText.text = currentStudent.regno
+            emailText.text = currentStudent.email
+            genderText.text = currentStudent.gender
+            programText.text = currentStudent.program
+            levelText.text = currentStudent.level
+
+            if (currentStudent.user == Constants.CANDIDATE) {
                 candidateImage.visibility = View.VISIBLE
                 additionalLayout.visibility = View.VISIBLE
-
-                nameText.text = prefs.getString(Constants.CNAME, "")
-                regnoText.text = prefs.getString(Constants.CREGNO, "")
-                emailText.text = prefs.getString(Constants.CEMAIL, "")
-                genderText.text = prefs.getString(Constants.CGENDER, "")
-                programText.text = prefs.getString(Constants.CPROGRAM, "")
-                levelText.text = prefs.getString(Constants.CLEVEL, "")
-                positionText.text = prefs.getString(Constants.CPOSITION, "")
-                bioText.text = prefs.getString(Constants.CBIO, "")
+                positionText.text = currentStudent.position
+                bioText.text = currentStudent.bio
+                currentStudent.photo?.let {
+                    Glide.with(requireContext())
+                        .load(it)
+                        .centerCrop()
+                        .placeholder(R.drawable.ic_account)
+                        .into(candidateImage)
+                }
             } else {
                 candidateImage.visibility = View.GONE
                 additionalLayout.visibility = View.GONE
-
-                nameText.text = prefs.getString(Constants.SNAME, "")
-                regnoText.text = prefs.getString(Constants.SREGNO, "")
-                emailText.text = prefs.getString(Constants.SEMAIL, "")
-                genderText.text = prefs.getString(Constants.SGENDER, "")
-                programText.text = prefs.getString(Constants.SPROGRAM, "")
-                levelText.text = prefs.getString(Constants.SLEVEL, "")
             }
             menuTextView.setOnClickListener { drawerLayout.openDrawer(GravityCompat.START) }
         }

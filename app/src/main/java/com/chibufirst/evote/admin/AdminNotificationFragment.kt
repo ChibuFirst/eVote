@@ -3,6 +3,7 @@ package com.chibufirst.evote.admin
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import com.chibufirst.evote.MainActivity
@@ -18,16 +18,32 @@ import com.chibufirst.evote.R
 import com.chibufirst.evote.adapters.NotificationsRecyclerAdapter
 import com.chibufirst.evote.databinding.FragmentAdminNotificationBinding
 import com.chibufirst.evote.models.Notifications
+import com.chibufirst.evote.util.Constants
+import com.chibufirst.evote.util.Util
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.EventListener
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.Source
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class AdminNotificationFragment : Fragment() {
 
     private var binding: FragmentAdminNotificationBinding? = null
+    private lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
+    private lateinit var firestoreListener: ListenerRegistration
     private lateinit var notificationsAdapter: NotificationsRecyclerAdapter
-    private lateinit var demoNotifications: ArrayList<Notifications>
+
+    companion object {
+        private val TAG: String = AdminNotificationFragment::class.java.simpleName
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,55 +57,71 @@ class AdminNotificationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        demoNotifications = arrayListOf(
-            Notifications(
-                "Welcome to this portal for the ELECTION, feel free to explore and view different positions and their candidates.",
-                "12/07/2021"
-            ),
-            Notifications(
-                "The date for this year's election will be communicated soon, get to decide those that will lead.",
-                "16/07/2021"
-            ),
-            Notifications(
-                "Please don't forget this: If you don't vote, you loose the right to complain.",
-                "18/07/2021"
-            ),
-            Notifications("Just know that your vote counts.", "20/07/2021"),
-            Notifications(
-                "Welcome to this portal for the ELECTION, feel free to explore and view different positions and their candidates.",
-                "12/07/2021"
-            ),
-            Notifications(
-                "The date for this year's election will be communicated soon, get to decide those that will lead.",
-                "16/07/2021"
-            ),
-            Notifications(
-                "Please don't forget this: If you don't vote, you loose the right to complain.",
-                "18/07/2021"
-            ),
-            Notifications("Just know that your vote counts.", "20/07/2021")
-        )
+        auth = Firebase.auth
+        db = Firebase.firestore
+
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
         val currentSession = "${currentYear-1}/$currentYear"
+
         binding!!.apply {
             titleText.text = getString(R.string.elections, currentSession)
             headerText.setOnClickListener { requireActivity().onBackPressed() }
             notificationsRecycler.setHasFixedSize(true)
-            if (demoNotifications.isEmpty()) {
-                notificationInfoLayout.visibility = View.VISIBLE
-                notificationsRecycler.visibility = View.GONE
-            } else {
-                notificationInfoLayout.visibility = View.GONE
-                notificationsRecycler.visibility = View.VISIBLE
-                notificationsAdapter = NotificationsRecyclerAdapter(demoNotifications)
-                notificationsRecycler.adapter = notificationsAdapter
-            }
             logoutImage.setOnClickListener {
+                auth.signOut()
                 requireActivity().startActivity(Intent(requireActivity(), MainActivity::class.java))
                 requireActivity().finish()
             }
             addFab.setOnClickListener { showAddNotificationDialog() }
         }
+
+        db.collection(Constants.NOTIFICATIONS)
+            .get(Source.CACHE)
+            .addOnCompleteListener { task ->
+                val notificationsList = arrayListOf<Notifications>()
+                if (task.isSuccessful) {
+                    for (doc in task.result!!) {
+                        val notifications = doc.toObject<Notifications>()
+                        notificationsList.add(notifications)
+                    }
+                }
+                binding!!.apply {
+                    if (notificationsList.isEmpty()) {
+                        notificationInfoLayout.visibility = View.VISIBLE
+                        notificationsRecycler.visibility = View.GONE
+                    } else {
+                        notificationInfoLayout.visibility = View.GONE
+                        notificationsRecycler.visibility = View.VISIBLE
+                        notificationsAdapter = NotificationsRecyclerAdapter(notificationsList)
+                        notificationsRecycler.adapter = notificationsAdapter
+                    }
+                }
+            }
+
+        firestoreListener = db.collection(Constants.NOTIFICATIONS)
+            .addSnapshotListener(EventListener { value, error ->
+                if (error != null) {
+                    Log.e(TAG, "Listen failed!", error)
+                    return@EventListener
+                }
+
+                val notifyList = arrayListOf<Notifications>()
+                for (doc in value!!) {
+                    val notifications = doc.toObject<Notifications>()
+                    notifyList.add(notifications)
+                }
+                binding!!.apply {
+                    if (notifyList.isEmpty()) {
+                        notificationInfoLayout.visibility = View.VISIBLE
+                        notificationsRecycler.visibility = View.GONE
+                    } else {
+                        notificationInfoLayout.visibility = View.GONE
+                        notificationsRecycler.visibility = View.VISIBLE
+                        notificationsAdapter = NotificationsRecyclerAdapter(notifyList)
+                        notificationsRecycler.adapter = notificationsAdapter
+                    }
+                }
+            })
     }
 
     @SuppressLint("InflateParams")
@@ -114,24 +146,30 @@ class AdminNotificationFragment : Fragment() {
 
     private fun validateInput(notificationEditText: EditText, dialog: AlertDialog) {
         if (notificationEditText.text.isEmpty()) {
-            displayMessage("Please enter your message.")
+            Util.displayLongMessage(requireContext(), "Please enter your message.")
             notificationEditText.requestFocus()
             return
         } else {
             val currentDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
-            demoNotifications.add(Notifications(notificationEditText.text.toString(), currentDate))
-            notificationsAdapter.notifyDataSetChanged()
-            displayMessage("Notification added.")
+            val notifications = Notifications(notificationEditText.text.toString(), currentDate)
+            db.collection(Constants.NOTIFICATIONS)
+                .add(notifications)
+                .addOnSuccessListener {
+                    Util.displayLongMessage(requireContext(), "Notification added.")
+                }
+                .addOnFailureListener { e ->
+                    Util.displayLongMessage(
+                        requireContext(),
+                        "Error: ${e.message}"
+                    )
+                }
             dialog.dismiss()
         }
     }
 
-    private fun displayMessage(msg: String) {
-        Toast.makeText(requireContext(), msg, Toast.LENGTH_LONG).show()
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
+        firestoreListener.remove()
         binding = null
     }
 
