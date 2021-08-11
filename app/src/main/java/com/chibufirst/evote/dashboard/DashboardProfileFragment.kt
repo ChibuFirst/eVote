@@ -1,6 +1,5 @@
 package com.chibufirst.evote.dashboard
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -18,7 +17,6 @@ import java.util.*
 class DashboardProfileFragment : Fragment() {
 
     private var binding: FragmentDashboardProfileBinding? = null
-    private lateinit var prefs: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,7 +30,6 @@ class DashboardProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        prefs = requireContext().getSharedPreferences(Constants.PREF_NAME, 0)
         val currentStudent =
             requireActivity().intent.getSerializableExtra(Constants.USER) as Student
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)

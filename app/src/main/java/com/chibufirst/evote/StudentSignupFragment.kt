@@ -1,6 +1,5 @@
 package com.chibufirst.evote
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,8 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.chibufirst.evote.admin.AdminActivity
-import com.chibufirst.evote.dashboard.DashboardActivity
 import com.chibufirst.evote.databinding.FragmentStudentSignupBinding
 import com.chibufirst.evote.models.Student
 import com.chibufirst.evote.util.Constants
@@ -19,7 +16,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 
 class StudentSignupFragment : Fragment() {
@@ -61,7 +57,10 @@ class StudentSignupFragment : Fragment() {
                     return
                 }
                 regnoEditText.text.isEmpty() -> {
-                    Util.displayLongMessage(requireContext(), "Please enter your registration number.")
+                    Util.displayLongMessage(
+                        requireContext(),
+                        "Please enter your registration number."
+                    )
                     regnoEditText.requestFocus()
                     return
                 }
@@ -76,7 +75,10 @@ class StudentSignupFragment : Fragment() {
                     return
                 }
                 passwordEditText.text.toString().length < 6 -> {
-                    Util.displayLongMessage(requireContext(), "Your password should be at least 6 characters.")
+                    Util.displayLongMessage(
+                        requireContext(),
+                        "Your password should be at least 6 characters."
+                    )
                     passwordEditText.requestFocus()
                     return
                 }
@@ -93,10 +95,7 @@ class StudentSignupFragment : Fragment() {
                         emailEditText.text.toString(),
                         genderSpinner.selectedItem.toString(),
                         programSpinner.selectedItem.toString(),
-                        levelSpinner.selectedItem.toString(),
-                        "",
-                        "",
-                        ""
+                        levelSpinner.selectedItem.toString()
                     )
                     createAccount(student, passwordEditText.text.toString())
                 }
@@ -118,15 +117,28 @@ class StudentSignupFragment : Fragment() {
                     db.collection(Constants.USERS)
                         .document(student.email!!)
                         .set(student)
-                        .addOnSuccessListener { Util.displayLongMessage(requireContext(), "Details saved") }
-                        .addOnFailureListener { e -> Util.displayLongMessage(requireContext(), "Error saving details: \n${e.message}") }
+                        .addOnSuccessListener {
+                            Util.displayLongMessage(
+                                requireContext(),
+                                "Details saved"
+                            )
+                        }
+                        .addOnFailureListener { e ->
+                            Util.displayLongMessage(
+                                requireContext(),
+                                "Error saving details: \n${e.message}"
+                            )
+                        }
                     Util.displayLongMessage(requireContext(), "Registration successful.")
                     findNavController().navigate(R.id.action_studentSignupFragment_to_loginFragment)
                 } else {
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                    Util.displayLongMessage(requireContext(), "Registration was not successful.\n${task.exception?.message}")
+                    Util.displayLongMessage(
+                        requireContext(),
+                        "Registration was not successful.\n${task.exception?.message}"
+                    )
+                    toggleProgressLayout(false)
                 }
-                toggleProgressLayout(false)
             }
     }
 
@@ -135,39 +147,6 @@ class StudentSignupFragment : Fragment() {
             binding!!.progressLayout.visibility = View.VISIBLE
         } else {
             binding!!.progressLayout.visibility = View.GONE
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        auth.currentUser?.let {
-            if (it.email != Constants.ADMIN) {
-                db.collection(Constants.USERS).document(it.email!!)
-                    .get()
-                    .addOnSuccessListener { document ->
-                        if (document != null) {
-                            Log.d(TAG, "DocumentSnapshot data: ${document.data}")
-                            val student = document.toObject<Student>()
-                            Util.displayLongMessage(requireContext(), "Login Successful.")
-
-                            val intent = Intent(requireContext(), DashboardActivity::class.java)
-                            intent.putExtra(Constants.USER, student)
-                            requireContext().startActivity(intent)
-                            requireActivity().finish()
-                        } else {
-                            Log.d(TAG, "No such document")
-                            Util.displayLongMessage(requireContext(), "No such document")
-                        }
-                    }
-                    .addOnFailureListener { exception ->
-                        Log.d(TAG, "get failed with ", exception)
-                        Util.displayLongMessage(requireContext(), "get failed with \n ${exception.message}")
-                    }
-            } else {
-                Util.displayLongMessage(requireContext(), "Admin login successful.")
-                requireContext().startActivity(Intent(requireContext(), AdminActivity::class.java))
-                requireActivity().finish()
-            }
         }
     }
 

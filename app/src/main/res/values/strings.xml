@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">eVote</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="create_an_account">Create an Account</string>
     <string name="sign_up_as_a_student">Sign up as a Student</string>
     <string name="sign_up_as_candidate">Sign up as Candidate</string>
@@ -13,7 +11,6 @@
     <string name="full_name">Full name</string>
     <string name="john_doe">John Doe</string>
     <string name="registration_number">Registration number</string>
-    <string name="_20_0001_slt">20/0001/SLT</string>
     <string name="gender">Gender</string>
     <string name="create_new_password">Create new password</string>
     <string name="confirm_password">Confirm password</string>
@@ -33,14 +30,12 @@
     <string name="welcome">Welcome</string>
     <string name="your_opinions_matter">Your opinions matter</string>
     <string name="elections">%s Elections</string>
-    <string name="timer">%s Remaining</string>
+    <string name="timer">%s</string>
     <string name="list_of_positions">List of Positions</string>
     <string name="candidates">Candidates</string>
     <string name="no_candidate_s_for_this_position">No candidate(s) for this position</string>
     <string name="admin_dashboard">Admin Dashboard</string>
     <string name="manage_candidates">Manage Candidates</string>
-    <string name="demo_bio_text">I am a 200l student with passion for photography and nature. I have put effort in building my writing skills in the past years and i hope i am being chosen as your secretary. Please vote for me guys!</string>
-    <string name="president">President</string>
     <string name="notifications">Notifications</string>
     <string name="profile">Profile</string>
     <string name="log_out">Log out</string>
@@ -52,19 +47,35 @@
     <string name="exit_note">Thanks for using this application.</string>
     <string name="bio">Bio</string>
     <string name="thank_you">Thank you!</string>
-    <string name="completed_voting_message">You have completed the voting process. \nHead over to the results page to \nsee how others have voted.</string>
+    <string name="completed_voting_message">You have completed the voting process. \nHead over to the home page to \nsee how others have voted or the \nresults page to view the results.</string>
     <string name="back">Back</string>
     <string name="voting_quotes">This right to vote \nis the basic right without which \nall others are meaningless. \nRest assured, your vote counts.</string>
     <string name="continue_text">Continue</string>
-    <string name="code_info">Please kindly enter the voting code \nthat was sent to you. \nYou can find it in your notifications</string>
     <string name="confirm">Confirm</string>
     <string name="email_address">Email address</string>
     <string name="password">Password</string>
     <string name="welcome_admin">Welcome Admin!</string>
-    <string name="type_a_message">Type a message...</string>
+    <string name="type_a_message">Type a message…</string>
     <string name="submit">Submit</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="forgot">Forgot</string>
+    <string name="no_candidates">No registered/approved candidates for %s yet.</string>
+    <string name="president">President</string>
+    <string name="vice_president">Vice President</string>
+    <string name="secretary">Secretary General</string>
+    <string name="assistant_secretary">Assistant Secretary General</string>
+    <string name="financial_secretary">Financial Secretary</string>
+    <string name="ethics_and_research">Ethics and research</string>
+    <string name="socials">Socials</string>
+    <string name="publicity">Publicity</string>
+    <string name="welfare">Welfare</string>
+    <string name="the_election_have_not_started_yet">The election have not started yet or might have ended.</string>
+    <string name="cancel">Cancel</string>
+    <string name="approve">Approve</string>
+    <string name="results_page">Results Page</string>
+    <string name="home_page">Home Page</string>
+    <string name="start_election">Start Election</string>
+    <string name="end_election">End Election</string>
     <string-array name="gender">
         <item>Male</item>
         <item>Female</item>

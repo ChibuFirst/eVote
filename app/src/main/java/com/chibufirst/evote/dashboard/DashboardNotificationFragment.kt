@@ -13,10 +13,8 @@ import com.chibufirst.evote.adapters.NotificationsRecyclerAdapter
 import com.chibufirst.evote.databinding.FragmentDashboardNotificationBinding
 import com.chibufirst.evote.models.Notifications
 import com.chibufirst.evote.util.Constants
+import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ListenerRegistration
-import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -48,8 +46,9 @@ class DashboardNotificationFragment : Fragment() {
         db = Firebase.firestore
 
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        val currentSession = "${currentYear-1}/$currentYear"
-        val drawerLayout: DrawerLayout = requireActivity().findViewById(R.id.dashboard_drawer_layout) as DrawerLayout
+        val currentSession = "${currentYear - 1}/$currentYear"
+        val drawerLayout: DrawerLayout =
+            requireActivity().findViewById(R.id.dashboard_drawer_layout) as DrawerLayout
 
         binding!!.apply {
             menuTextView.setOnClickListener { drawerLayout.openDrawer(GravityCompat.START) }
@@ -58,6 +57,7 @@ class DashboardNotificationFragment : Fragment() {
         }
 
         db.collection(Constants.NOTIFICATIONS)
+            .orderBy("timestamp", Query.Direction.DESCENDING)
             .get(Source.CACHE)
             .addOnCompleteListener { task ->
                 val notificationsList = arrayListOf<Notifications>()
@@ -81,6 +81,7 @@ class DashboardNotificationFragment : Fragment() {
             }
 
         firestoreListener = db.collection(Constants.NOTIFICATIONS)
+            .orderBy("timestamp", Query.Direction.DESCENDING)
             .addSnapshotListener(EventListener { value, error ->
                 if (error != null) {
                     Log.e(TAG, "Listen failed!", error)

@@ -28,7 +28,7 @@ class LandingPageFragment : Fragment() {
     private lateinit var db: FirebaseFirestore
 
     companion object {
-        private val TAG: String = StudentSignupFragment::class.java.simpleName
+        private val TAG: String = LandingPageFragment::class.java.simpleName
     }
 
     override fun onCreateView(
@@ -51,35 +51,65 @@ class LandingPageFragment : Fragment() {
             candidateButton.setOnClickListener { findNavController().navigate(R.id.action_landingPageFragment_to_candidateSignupFragment) }
             loginText.setOnClickListener { findNavController().navigate(R.id.action_landingPageFragment_to_loginFragment) }
         }
+        toggleProgressLayout(true)
+    }
+
+    private fun toggleProgressLayout(isShown: Boolean) {
+        if (isShown) {
+            binding!!.progressLayout.visibility = View.VISIBLE
+        } else {
+            binding!!.progressLayout.visibility = View.GONE
+        }
     }
 
     override fun onStart() {
         super.onStart()
-        auth.currentUser?.let {
-            if (it.email != Constants.ADMIN) {
-                db.collection(Constants.USERS).document(it.email!!)
+        val currentUser = auth.currentUser
+        if (currentUser == null) {
+            toggleProgressLayout(false)
+        } else {
+            if (currentUser.email != Constants.ADMIN) {
+                db.collection(Constants.USERS).document(currentUser.email!!)
                     .get()
                     .addOnSuccessListener { document ->
                         if (document != null) {
                             Log.d(TAG, "DocumentSnapshot data: ${document.data}")
                             val student = document.toObject<Student>()
-                            Util.displayLongMessage(requireContext(), "Login Successful.")
 
-                            val intent = Intent(requireContext(), DashboardActivity::class.java)
-                            intent.putExtra(Constants.USER, student)
-                            requireContext().startActivity(intent)
-                            requireActivity().finish()
+                            if (student?.user.equals(Constants.CANDIDATE) && student?.approve != true) {
+                                auth.signOut()
+                                Util.displayLongMessage(
+                                    requireContext(),
+                                    "Hi ${student?.fullName} \nYou have not been approved by the admin yet!"
+                                )
+                                toggleProgressLayout(false)
+                            } else {
+                                Util.displayLongMessage(
+                                    requireContext(),
+                                    "Welcome back, ${student?.fullName}."
+                                )
+                                val intent = Intent(requireContext(), DashboardActivity::class.java)
+                                intent.putExtra(Constants.USER, student)
+                                requireContext().startActivity(intent)
+                                requireActivity().finish()
+                            }
                         } else {
                             Log.d(TAG, "No such document")
                             Util.displayLongMessage(requireContext(), "No such document")
+                            toggleProgressLayout(false)
                         }
                     }
                     .addOnFailureListener { exception ->
                         Log.d(TAG, "get failed with ", exception)
-                        Util.displayLongMessage(requireContext(), "get failed with \n ${exception.message}")
+                        Util.displayLongMessage(
+                            requireContext(),
+                            "get failed with \n ${exception.message}"
+                        )
+                        toggleProgressLayout(false)
                     }
             } else {
-                Util.displayLongMessage(requireContext(), "Admin login successful.")
+                toggleProgressLayout(false)
+                Util.displayLongMessage(requireContext(), "Welcome Back, Admin.")
                 requireContext().startActivity(Intent(requireContext(), AdminActivity::class.java))
                 requireActivity().finish()
             }

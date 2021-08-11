@@ -30,11 +30,14 @@ class DashboardHomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = ArrayAdapter(requireContext(),
-            R.layout.position_list_item, resources.getStringArray(R.array.position))
+        val adapter = ArrayAdapter(
+            requireContext(),
+            R.layout.position_list_item, resources.getStringArray(R.array.position)
+        )
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        val currentSession = "${currentYear-1}/$currentYear"
-        val drawerLayout: DrawerLayout = requireActivity().findViewById(R.id.dashboard_drawer_layout) as DrawerLayout
+        val currentSession = "${currentYear - 1}/$currentYear"
+        val drawerLayout: DrawerLayout =
+            requireActivity().findViewById(R.id.dashboard_drawer_layout) as DrawerLayout
         binding!!.apply {
             titleText.text = getString(R.string.elections, currentSession)
             menuImage.setOnClickListener { drawerLayout.openDrawer(GravityCompat.START) }
@@ -42,7 +45,10 @@ class DashboardHomeFragment : Fragment() {
             positionList.adapter = adapter
             positionList.setOnItemClickListener { _, _, i, _ ->
                 val item: String = positionList.getItemAtPosition(i).toString()
-                val action = DashboardHomeFragmentDirections.actionDashboardHomeFragmentToDashboardPositionFragment(item)
+                val action =
+                    DashboardHomeFragmentDirections.actionDashboardHomeFragmentToDashboardPositionFragment(
+                        item
+                    )
                 positionList.findNavController().navigate(action)
             }
         }

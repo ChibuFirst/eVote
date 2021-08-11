@@ -21,7 +21,6 @@
             android:background="#2D2177"
             android:drawablePadding="8dp"
             android:padding="8dp"
-            android:text="@string/timer"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textStyle="bold"

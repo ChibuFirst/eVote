@@ -34,10 +34,12 @@ class AdminPositionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         auth = Firebase.auth
-        val adapter = ArrayAdapter(requireContext(),
-            R.layout.position_list_item, resources.getStringArray(R.array.position))
+        val adapter = ArrayAdapter(
+            requireContext(),
+            R.layout.position_list_item, resources.getStringArray(R.array.position)
+        )
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        val currentSession = "${currentYear-1}/$currentYear"
+        val currentSession = "${currentYear - 1}/$currentYear"
         binding!!.apply {
             titleText.text = getString(R.string.elections, currentSession)
             headerText.setOnClickListener { requireActivity().onBackPressed() }
@@ -49,7 +51,10 @@ class AdminPositionFragment : Fragment() {
             positionList.adapter = adapter
             positionList.setOnItemClickListener { _, _, i, _ ->
                 val item: String = positionList.getItemAtPosition(i).toString()
-                val action = AdminPositionFragmentDirections.actionAdminPositionFragmentToAdminCandidateFragment(item)
+                val action =
+                    AdminPositionFragmentDirections.actionAdminPositionFragmentToAdminCandidateFragment(
+                        item
+                    )
                 positionList.findNavController().navigate(action)
             }
         }

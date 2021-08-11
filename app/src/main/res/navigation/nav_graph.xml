@@ -9,7 +9,7 @@
         android:id="@+id/landingPageFragment"
         android:name="com.chibufirst.evote.LandingPageFragment"
         android:label="fragment_landing_page"
-        tools:layout="@layout/fragment_landing_page" >
+        tools:layout="@layout/fragment_landing_page">
         <action
             android:id="@+id/action_landingPageFragment_to_studentSignupFragment"
             app:destination="@id/studentSignupFragment" />
@@ -24,7 +24,7 @@
         android:id="@+id/studentSignupFragment"
         android:name="com.chibufirst.evote.StudentSignupFragment"
         android:label="fragment_student_signup"
-        tools:layout="@layout/fragment_student_signup" >
+        tools:layout="@layout/fragment_student_signup">
         <action
             android:id="@+id/action_studentSignupFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
@@ -33,7 +33,7 @@
         android:id="@+id/candidateSignupFragment"
         android:name="com.chibufirst.evote.CandidateSignupFragment"
         android:label="fragment_candidate_signup"
-        tools:layout="@layout/fragment_candidate_signup" >
+        tools:layout="@layout/fragment_candidate_signup">
         <action
             android:id="@+id/action_candidateSignupFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
@@ -42,7 +42,7 @@
         android:id="@+id/loginFragment"
         android:name="com.chibufirst.evote.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_forgotPasswordFragment"
             app:destination="@id/forgotPasswordFragment" />

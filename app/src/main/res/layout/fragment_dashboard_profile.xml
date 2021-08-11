@@ -9,22 +9,19 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?actionBarSize"
         android:background="#130A46">
 
         <TextView
             android:id="@+id/menu_text_view"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_height="match_parent"
             android:background="?selectableItemBackgroundBorderless"
             android:clickable="true"
             android:drawablePadding="16dp"
             android:focusable="true"
             android:gravity="center"
-            android:padding="6dp"
+            android:padding="16dp"
             android:text="@string/profile"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
             android:textColor="@color/white"
@@ -51,7 +48,6 @@
         android:layout_height="72dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp"
-        android:importantForAccessibility="no"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_account"
         android:visibility="gone"

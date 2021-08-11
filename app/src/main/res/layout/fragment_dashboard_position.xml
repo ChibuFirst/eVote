@@ -5,25 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".dashboard.DashboardPositionFragment">
+    tools:context=".dashboard.DashboardCandidateFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?actionBarSize"
         android:background="#130A46">
 
         <TextView
             android:id="@+id/position_text_view"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_height="match_parent"
             android:background="?selectableItemBackgroundBorderless"
             android:clickable="true"
             android:drawablePadding="16dp"
             android:focusable="true"
             android:gravity="center"
+            android:padding="16dp"
             android:text="@string/position"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
@@ -60,7 +58,34 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="16dp"
+        android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/candidates_list_item" />
+
+    <LinearLayout
+        android:id="@+id/error_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ProgressBar
+            android:id="@+id/loading_progress"
+            style="?android:progressBarStyleHorizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
+
+        <TextView
+            android:id="@+id/error_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:text="@string/no_candidates"
+            android:textColor="@color/teal_200"
+            android:visibility="gone" />
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -10,6 +10,8 @@ import androidx.navigation.fragment.findNavController
 import com.chibufirst.evote.MainActivity
 import com.chibufirst.evote.R
 import com.chibufirst.evote.databinding.FragmentAdminHomeBinding
+import com.chibufirst.evote.util.Util
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -34,7 +36,7 @@ class AdminHomeFragment : Fragment() {
 
         auth = Firebase.auth
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        val currentSession = "${currentYear-1}/$currentYear"
+        val currentSession = "${currentYear - 1}/$currentYear"
         binding!!.apply {
             titleText.text = getString(R.string.elections, currentSession)
             logoutImage.setOnClickListener {
@@ -46,6 +48,24 @@ class AdminHomeFragment : Fragment() {
             notificationCard.setOnClickListener { findNavController().navigate(R.id.action_adminHomeFragment_to_adminNotificationFragment2) }
             electionCard.setOnClickListener { findNavController().navigate(R.id.action_adminHomeFragment_to_adminVoteFragment) }
             resultCard.setOnClickListener { findNavController().navigate(R.id.action_adminHomeFragment_to_adminResultFragment) }
+            clearImage.setOnLongClickListener {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setCancelable(false)
+                    .setTitle("Clear database?")
+                    .setMessage("You're about to clear the entire database. \n(This is permanent and can't be undone)")
+                    .setNegativeButton("Cancel") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .setPositiveButton("Clear") { dialog, _ ->
+                        Util.displayLongMessage(
+                            requireContext(),
+                            "For your mind, I go allow you do am? \n:("
+                        )
+                        dialog.dismiss()
+                    }
+                    .create().show()
+                true
+            }
         }
     }
 

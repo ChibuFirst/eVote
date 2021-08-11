@@ -1,3 +1,9 @@
 package com.chibufirst.evote.models
 
-data class Notifications(val message: String? = null, val date: String? = null)
+import com.google.firebase.Timestamp
+
+data class Notifications(
+    val message: String? = null,
+    val date: String? = null,
+    val timestamp: Timestamp? = null
+)

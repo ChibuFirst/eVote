@@ -25,7 +25,8 @@ class DashboardVotingCompletedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding!!.backButton.setOnClickListener { findNavController().navigate(R.id.action_dashboardVotingCompletedFragment_to_dashboardHomeFragment) }
+        binding!!.homeButton.setOnClickListener { findNavController().navigate(R.id.action_dashboardVotingCompletedFragment_to_dashboardHomeFragment) }
+        binding!!.resultButton.setOnClickListener { findNavController().navigate(R.id.action_dashboardVotingCompletedFragment_to_dashboardResultFragment) }
     }
 
     override fun onDestroyView() {

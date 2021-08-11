@@ -1,0 +1,9 @@
+package com.chibufirst.evote.models
+
+data class Election(
+    val status: String? = null,
+    val date: String? = null,
+    val startTime: String? = null,
+    val endTime: String? = null,
+    val duration: String? = null
+)

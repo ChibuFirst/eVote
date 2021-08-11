@@ -6,12 +6,13 @@
     android:layout_height="wrap_content"
     android:padding="16dp">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/photo_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:importantForAccessibility="no"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
         android:src="@drawable/nom1"
+        app:civ_border_color="@color/white"
+        app:civ_border_width="1dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,5 +36,15 @@
         app:layout_constraintStart_toEndOf="@id/photo_image"
         app:layout_constraintTop_toBottomOf="@id/name_text"
         tools:text="HND 2" />
+
+    <TextView
+        android:id="@+id/vote_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/teal_200"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="25 votes" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

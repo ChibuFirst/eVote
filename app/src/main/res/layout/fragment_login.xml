@@ -65,7 +65,7 @@
             android:layout_marginTop="4dp"
             android:background="@drawable/edit_text_background"
             android:importantForAutofill="no"
-            android:inputType="textEmailAddress|textCapSentences"
+            android:inputType="textEmailAddress"
             android:textColor="@color/white"
             android:textColorHint="#949494"
             android:textSize="14sp"

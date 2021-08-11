@@ -79,16 +79,72 @@ class LoginFragment : Fragment() {
                                 val user = auth.currentUser
                                 user?.let {
                                     if (it.email != Constants.ADMIN) {
-                                        getUserDataAndLogin(it)
+                                        db.collection(Constants.USERS).document(it.email!!)
+                                            .get()
+                                            .addOnSuccessListener { document ->
+                                                if (document != null) {
+                                                    Log.d(
+                                                        TAG,
+                                                        "DocumentSnapshot data: ${document.data}"
+                                                    )
+                                                    val student = document.toObject<Student>()
+
+                                                    if (student?.user.equals(Constants.CANDIDATE) && student?.approve != true) {
+                                                        auth.signOut()
+                                                        Util.displayLongMessage(
+                                                            requireContext(),
+                                                            "Hi ${student?.fullName} \nYou have not been approved by the admin yet!"
+                                                        )
+                                                        toggleProgressLayout(false)
+                                                    } else {
+                                                        Util.displayLongMessage(
+                                                            requireContext(),
+                                                            "Login successful."
+                                                        )
+                                                        val intent = Intent(
+                                                            requireContext(),
+                                                            DashboardActivity::class.java
+                                                        )
+                                                        intent.putExtra(Constants.USER, student)
+                                                        requireContext().startActivity(intent)
+                                                        requireActivity().finish()
+                                                    }
+                                                } else {
+                                                    Log.d(TAG, "No such document")
+                                                    Util.displayLongMessage(
+                                                        requireContext(),
+                                                        "No such document"
+                                                    )
+                                                }
+                                            }
+                                            .addOnFailureListener { exception ->
+                                                Log.d(TAG, "get failed with ", exception)
+                                                Util.displayLongMessage(
+                                                    requireContext(),
+                                                    "get failed with \n ${exception.message}"
+                                                )
+                                                toggleProgressLayout(false)
+                                            }
                                     } else {
-                                        Util.displayLongMessage(requireContext(), "Admin login successful.")
-                                        requireContext().startActivity(Intent(requireContext(), AdminActivity::class.java))
+                                        Util.displayLongMessage(
+                                            requireContext(),
+                                            "Admin login successful."
+                                        )
+                                        requireContext().startActivity(
+                                            Intent(
+                                                requireContext(),
+                                                AdminActivity::class.java
+                                            )
+                                        )
                                         requireActivity().finish()
                                     }
                                 }
                             } else {
                                 Log.w(TAG, "signInWithEmail:failure", task.exception)
-                                Util.displayLongMessage(requireContext(), "Authentication failed. \n${task.exception?.message}")
+                                Util.displayLongMessage(
+                                    requireContext(),
+                                    "Authentication failed. \n${task.exception?.message}"
+                                )
                                 toggleProgressLayout(false)
                             }
                         }
@@ -97,49 +153,11 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private fun getUserDataAndLogin(currentUser: FirebaseUser) {
-        db.collection(Constants.USERS).document(currentUser.email!!)
-            .get()
-            .addOnSuccessListener { document ->
-                if (document != null) {
-                    Log.d(TAG, "DocumentSnapshot data: ${document.data}")
-                    val student = document.toObject<Student>()
-                    Util.displayLongMessage(requireContext(), "Login Successful.")
-
-                    val intent = Intent(requireContext(), DashboardActivity::class.java)
-                    intent.putExtra(Constants.USER, student)
-                    requireContext().startActivity(intent)
-                    requireActivity().finish()
-                } else {
-                    Log.d(TAG, "No such document")
-                    Util.displayLongMessage(requireContext(), "No such document")
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.d(TAG, "get failed with ", exception)
-                Util.displayLongMessage(requireContext(), "get failed with \n ${exception.message}")
-            }
-        toggleProgressLayout(false)
-    }
-
     private fun toggleProgressLayout(isShown: Boolean) {
         if (isShown) {
             binding!!.progressLayout.visibility = View.VISIBLE
         } else {
             binding!!.progressLayout.visibility = View.GONE
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        auth.currentUser?.let {
-            if (it.email != Constants.ADMIN) {
-                getUserDataAndLogin(it)
-            } else {
-                Util.displayLongMessage(requireContext(), "Admin login successful.")
-                requireContext().startActivity(Intent(requireContext(), AdminActivity::class.java))
-                requireActivity().finish()
-            }
         }
     }
 

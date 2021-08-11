@@ -51,10 +51,16 @@ class ForgotPasswordFragment : Fragment() {
                     auth.sendPasswordResetEmail(email)
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
-                                Util.displayLongMessage(requireContext(), "Email sent... \nCheck your email and reset your password.")
+                                Util.displayLongMessage(
+                                    requireContext(),
+                                    "Email sent... \nCheck your email and reset your password."
+                                )
                                 requireActivity().onBackPressed()
                             } else {
-                                Util.displayLongMessage(requireContext(), "Error encountered: \n${task.exception?.message}")
+                                Util.displayLongMessage(
+                                    requireContext(),
+                                    "Error encountered: \n${task.exception?.message}"
+                                )
                             }
                             toggleProgressLayout(false)
                         }

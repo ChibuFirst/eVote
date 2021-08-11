@@ -9,7 +9,7 @@
         android:id="@+id/dashboardHomeFragment"
         android:name="com.chibufirst.evote.dashboard.DashboardHomeFragment"
         android:label="fragment_dashboard_home"
-        tools:layout="@layout/fragment_dashboard_home" >
+        tools:layout="@layout/fragment_dashboard_home">
         <action
             android:id="@+id/action_dashboardHomeFragment_to_dashboardPositionFragment"
             app:destination="@id/dashboardPositionFragment" />
@@ -19,9 +19,9 @@
     </fragment>
     <fragment
         android:id="@+id/dashboardPositionFragment"
-        android:name="com.chibufirst.evote.dashboard.DashboardPositionFragment"
+        android:name="com.chibufirst.evote.dashboard.DashboardCandidateFragment"
         android:label="fragment_dashboard_position"
-        tools:layout="@layout/fragment_dashboard_position" >
+        tools:layout="@layout/fragment_dashboard_position">
         <argument
             android:name="position"
             app:argType="string" />
@@ -45,15 +45,25 @@
         android:id="@+id/dashboardVoteFragment"
         android:name="com.chibufirst.evote.dashboard.DashboardVoteFragment"
         android:label="fragment_dashboard_vote"
-        tools:layout="@layout/fragment_dashboard_vote" />
+        tools:layout="@layout/fragment_dashboard_vote">
+        <action
+            android:id="@+id/action_dashboardVoteFragment_to_dashboardVotingCompletedFragment"
+            app:destination="@id/dashboardVotingCompletedFragment" />
+        <action
+            android:id="@+id/action_dashboardVoteFragment_to_dashboardHomeFragment"
+            app:destination="@id/dashboardHomeFragment" />
+    </fragment>
     <fragment
         android:id="@+id/dashboardVotingCompletedFragment"
         android:name="com.chibufirst.evote.dashboard.DashboardVotingCompletedFragment"
         android:label="fragment_dashboard_voting_completed"
-        tools:layout="@layout/fragment_dashboard_voting_completed" >
+        tools:layout="@layout/fragment_dashboard_voting_completed">
         <action
             android:id="@+id/action_dashboardVotingCompletedFragment_to_dashboardHomeFragment"
             app:destination="@id/dashboardHomeFragment" />
+        <action
+            android:id="@+id/action_dashboardVotingCompletedFragment_to_dashboardResultFragment"
+            app:destination="@id/dashboardResultFragment" />
     </fragment>
     <fragment
         android:id="@+id/dashboardLogoutFragment"

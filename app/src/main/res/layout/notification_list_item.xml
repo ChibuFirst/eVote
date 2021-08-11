@@ -32,8 +32,8 @@
             android:layout_marginTop="4dp"
             android:drawablePadding="4dp"
             android:gravity="center"
-            android:textSize="12sp"
             android:textColor="@color/white"
+            android:textSize="12sp"
             app:drawableStartCompat="@drawable/ic_calendar"
             tools:text="@tools:sample/date/ddmmyy" />
 

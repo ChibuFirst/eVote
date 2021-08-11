@@ -21,12 +21,11 @@ import com.chibufirst.evote.models.Notifications
 import com.chibufirst.evote.util.Constants
 import com.chibufirst.evote.util.Util
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ListenerRegistration
-import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -61,7 +60,7 @@ class AdminNotificationFragment : Fragment() {
         db = Firebase.firestore
 
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        val currentSession = "${currentYear-1}/$currentYear"
+        val currentSession = "${currentYear - 1}/$currentYear"
 
         binding!!.apply {
             titleText.text = getString(R.string.elections, currentSession)
@@ -76,6 +75,7 @@ class AdminNotificationFragment : Fragment() {
         }
 
         db.collection(Constants.NOTIFICATIONS)
+            .orderBy("timestamp", Query.Direction.DESCENDING)
             .get(Source.CACHE)
             .addOnCompleteListener { task ->
                 val notificationsList = arrayListOf<Notifications>()
@@ -99,6 +99,7 @@ class AdminNotificationFragment : Fragment() {
             }
 
         firestoreListener = db.collection(Constants.NOTIFICATIONS)
+            .orderBy("timestamp", Query.Direction.DESCENDING)
             .addSnapshotListener(EventListener { value, error ->
                 if (error != null) {
                     Log.e(TAG, "Listen failed!", error)
@@ -127,10 +128,12 @@ class AdminNotificationFragment : Fragment() {
     @SuppressLint("InflateParams")
     private fun showAddNotificationDialog() {
         val materialAlertDialogBuilder = MaterialAlertDialogBuilder(requireContext())
-        val notificationView = LayoutInflater.from(requireContext()).inflate(R.layout.layout_add_notification, null)
-        val closeImage: ImageView =  notificationView.findViewById(R.id.close_image)
-        val notificationEditText: EditText =  notificationView.findViewById(R.id.notification_edit_text)
-        val submitButton: Button =  notificationView.findViewById(R.id.submit_button)
+        val notificationView =
+            LayoutInflater.from(requireContext()).inflate(R.layout.layout_add_notification, null)
+        val closeImage: ImageView = notificationView.findViewById(R.id.close_image)
+        val notificationEditText: EditText =
+            notificationView.findViewById(R.id.notification_edit_text)
+        val submitButton: Button = notificationView.findViewById(R.id.submit_button)
         materialAlertDialogBuilder.apply {
             setCancelable(false)
             setView(notificationView)
@@ -139,23 +142,32 @@ class AdminNotificationFragment : Fragment() {
         val notificationDialog: AlertDialog = materialAlertDialogBuilder.create()
 
         closeImage.setOnClickListener { notificationDialog.dismiss() }
-        submitButton.setOnClickListener { validateInput(notificationEditText, notificationDialog) }
+        submitButton.setOnClickListener {
+            Util.hideKeyboard(requireActivity())
+            submitButton.isEnabled = false
+            validateInput(submitButton, notificationEditText, notificationDialog)
+        }
 
         notificationDialog.show()
     }
 
-    private fun validateInput(notificationEditText: EditText, dialog: AlertDialog) {
+    private fun validateInput(button: Button, notificationEditText: EditText, dialog: AlertDialog) {
         if (notificationEditText.text.isEmpty()) {
             Util.displayLongMessage(requireContext(), "Please enter your message.")
             notificationEditText.requestFocus()
             return
         } else {
             val currentDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
-            val notifications = Notifications(notificationEditText.text.toString(), currentDate)
+            val notifications = Notifications(
+                notificationEditText.text.toString(), currentDate, Timestamp(
+                    Date()
+                )
+            )
             db.collection(Constants.NOTIFICATIONS)
                 .add(notifications)
                 .addOnSuccessListener {
-                    Util.displayLongMessage(requireContext(), "Notification added.")
+                    Util.displayShortMessage(requireContext(), "Notification added.")
+                    dialog.dismiss()
                 }
                 .addOnFailureListener { e ->
                     Util.displayLongMessage(
@@ -163,8 +175,8 @@ class AdminNotificationFragment : Fragment() {
                         "Error: ${e.message}"
                     )
                 }
-            dialog.dismiss()
         }
+        button.isEnabled = true
     }
 
     override fun onDestroyView() {
